@@ -1,0 +1,32 @@
+datasource postgres {
+  provider = "postgresql"
+  url      = env("POSTGRESQL_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  companion      Boolean?
+  createdAt      DateTime      @default(now())
+  firstName      String?
+  id             String        @id @default(cuid())
+  lastName       String?
+  password       String
+  roles          String[]
+  selectedMenu   SelectedMenu? @relation(fields: [selectedMenuId], references: [id])
+  selectedMenuId String?
+  updatedAt      DateTime      @updatedAt
+  username       String        @unique
+}
+
+model SelectedMenu {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  notes     String?
+  option1   String?
+  option2   String?
+  updatedAt DateTime @updatedAt
+  users     User[]
+}
